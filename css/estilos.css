@@ -230,3 +230,63 @@ footer {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
+
+/* Página de inicio */
+.inicio {
+    background: linear-gradient(135deg, #187a50, #4caf73);
+    color: white;
+    padding: 50px;
+    border-radius: 20px;
+
+    /* Coloca el texto y la imagen uno al lado del otro */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+
+/* Parte izquierda */
+.inicio-texto {
+    width: 50%;
+}
+
+
+.inicio h2 {
+    font-size: 38px;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+
+.inicio p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+
+/* Parte derecha */
+.inicio-imagen {
+    width: 45%;
+}
+
+
+/* Imagen */
+.inicio-imagen img {
+    width: 100%;
+    display: block;
+    border-radius: 18px;
+}
+
+
+/* Botón de la página principal */
+.inicio .boton {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 22px;
+    background-color: white;
+    color: #2e8b57;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+}
