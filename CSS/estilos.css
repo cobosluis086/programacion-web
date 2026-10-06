@@ -230,3 +230,116 @@ footer {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
+
+/* Página de inicio */
+.inicio {
+    background: linear-gradient(135deg, #187a50, #4caf73);
+    color: white;
+    padding: 50px;
+    border-radius: 20px;
+
+    /* Coloca el texto y la imagen uno al lado del otro */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+
+/* Parte izquierda */
+.inicio-texto {
+    width: 50%;
+}
+
+
+.inicio h2 {
+    font-size: 38px;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+
+.inicio p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+
+/* Parte derecha */
+.inicio-imagen {
+    width: 45%;
+}
+
+
+/* Imagen */
+.inicio-imagen img {
+    width: 100%;
+    display: block;
+    border-radius: 18px;
+}
+
+
+/* Botón de la página principal */
+.inicio .boton {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 22px;
+    background-color: white;
+    color: #2e8b57;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+}
+
+/* Formularios */
+form {
+    margin-top: 20px;
+}
+
+
+/* Etiquetas de los formularios */
+form label {
+    font-weight: bold;
+    color: #333;
+}
+
+
+/* Campos de texto y listas */
+form input,
+form select {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+
+/* Efecto cuando seleccionamos un campo */
+form input:focus,
+form select:focus {
+    outline: none;
+    border-color: #2e8b57;
+}
+
+
+/* Botones de los formularios */
+form button {
+    margin-top: 15px;
+    padding: 12px 22px;
+    background-color: #2e8b57;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+/* Efecto del botón */
+form button:hover {
+    background-color: #246f47;
+}
