@@ -1,4 +1,8 @@
+
 <?php
+
+// Incluimos las funciones de nuestro proyecto
+require_once "includes/funciones.php";
 
 // Arreglo que guarda la información de los centros
 $centros = [
@@ -77,7 +81,7 @@ if (isset($centros[$seleccion])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- PHP coloca automáticamente el nombre del centro -->
-    <title><?php echo $centro["nombre"]; ?> - ReciclaCDMX</title>
+    <title><?php echo escaparHTML($centro["nombre"]); ?> - ReciclaCDMX</title>
 
     <!-- Archivo CSS -->
     <link rel="stylesheet" href="css/estilos.css">
@@ -92,13 +96,7 @@ if (isset($centros[$seleccion])) {
         <h1>ReciclaCDMX</h1>
 
         <!-- Menú de navegación -->
-        <nav>
-            <a href="index.php">Inicio</a>
-            <a href="centros.php">Centros de reciclaje</a>
-            <a href="consejos.php">Consejos</a>
-            <a href="materiales.php">Materiales</a>
-            <a href="registro.php">Registro</a>
-        </nav>
+        <?php include "includes/nav.php"; ?>
 
     </header>
 
@@ -110,7 +108,7 @@ if (isset($centros[$seleccion])) {
         <section class="detalle-centro">
 
             <!-- Mostramos el nombre del centro seleccionado -->
-            <h2><?php echo $centro["nombre"]; ?></h2>
+            <h2><?php echo escaparHTML($centro["nombre"]); ?></h2>
 
             <p>
                 Este centro recibe diferentes materiales reciclables
@@ -118,34 +116,35 @@ if (isset($centros[$seleccion])) {
             </p>
 
             <!-- Imagen del centro de reciclaje -->
-            <img class="imagen-centro"
-                 src="img/centro-reciclaje.jpg"
-                 alt="Centro de reciclaje">
+            <img
+                class="imagen-centro"
+                src="img/centro-reciclaje.jpg"
+                alt="Centro de reciclaje"
+            >
 
             <h3>Información del centro</h3>
 
             <ul>
 
                 <!-- Mostramos la información guardada en el arreglo -->
-
                 <li>
                     <strong>Zona:</strong>
-                    <?php echo $centro["zona"]; ?>
+                    <?php echo escaparHTML($centro["zona"]); ?>
                 </li>
 
                 <li>
                     <strong>Horario:</strong>
-                    <?php echo $centro["horario"]; ?>
+                    <?php echo escaparHTML($centro["horario"]); ?>
                 </li>
 
                 <li>
                     <strong>Materiales:</strong>
-                    <?php echo $centro["materiales"]; ?>
+                    <?php echo escaparHTML($centro["materiales"]); ?>
                 </li>
 
                 <li>
                     <strong>Servicio:</strong>
-                    <?php echo $centro["servicio"]; ?>
+                    <?php echo escaparHTML($centro["servicio"]); ?>
                 </li>
 
             </ul>
@@ -163,20 +162,20 @@ if (isset($centros[$seleccion])) {
                 y separados antes de entregarlos.
             </p>
 
-            <?php
+            <!-- Condición para mostrar un mensaje dependiendo de la zona -->
+            <?php if ($centro["zona"] == "Miguel Hidalgo") { ?>
 
-            // Condición para mostrar un mensaje dependiendo de la zona
-            if ($centro["zona"] == "Miguel Hidalgo") {
+                <p>
+                    Este centro se encuentra en la zona de Miguel Hidalgo.
+                </p>
 
-                echo "<p>Este centro se encuentra en la zona de Miguel Hidalgo.</p>";
+            <?php } else { ?>
 
-            } else {
+                <p>
+                    Consulta el horario antes de acudir al centro de reciclaje.
+                </p>
 
-                echo "<p>Consulta el horario antes de acudir al centro de reciclaje.</p>";
-
-            }
-
-            ?>
+            <?php } ?>
 
             <!-- Botón para regresar -->
             <a class="boton" href="centros.php">
@@ -189,11 +188,7 @@ if (isset($centros[$seleccion])) {
 
 
     <!-- Pie de página -->
-    <footer>
-
-        <p>ReciclaCDMX - Programación Web</p>
-
-    </footer>
+    <?php include "includes/footer.php"; ?>
 
 </body>
 

@@ -1,4 +1,8 @@
+
 <?php
+
+// Incluimos las funciones del proyecto
+require_once "includes/funciones.php";
 
 // Variable que guarda el título de la página
 $titulo = "Registro de material";
@@ -9,6 +13,11 @@ $formularioEnviado = false;
 // Arreglo donde guardaremos los errores
 $errores = [];
 
+// Variables para guardar la información del formulario
+$nombre = "";
+$correo = "";
+$material = "";
+$cantidad = "";
 
 // Verificamos si el formulario fue enviado mediante POST
 if (isset($_POST["nombre"])) {
@@ -17,10 +26,9 @@ if (isset($_POST["nombre"])) {
 
     // Recuperamos los datos enviados desde el formulario
     $nombre = trim($_POST["nombre"]);
-    $correo = trim($_POST["correo"]);
-    $material = $_POST["material"];
-    $cantidad = trim($_POST["cantidad"]);
-
+    $correo = trim($_POST["correo"] ?? "");
+    $material = $_POST["material"] ?? "";
+    $cantidad = trim($_POST["cantidad"] ?? "");
 
     // Validamos que los campos no estén vacíos
     if (empty($nombre)) {
@@ -39,18 +47,22 @@ if (isset($_POST["nombre"])) {
         $errores[] = "La cantidad es obligatoria";
     }
 
-
     // Validamos que el nombre tenga al menos 3 caracteres
     if (!empty($nombre) && strlen($nombre) < 3) {
         $errores[] = "El nombre debe tener al menos 3 caracteres";
     }
-
 
     // Validamos que el correo tenga un formato correcto
     if (!empty($correo) && !filter_var($correo, FILTER_VALIDATE_EMAIL)) {
         $errores[] = "El correo no tiene un formato válido";
     }
 
+    // Validamos que el material sea una opción disponible
+    $materiales = obtenerMateriales();
+
+    if ($material !== "" && buscarMaterial($materiales, $material) === null) {
+        $errores[] = "El material seleccionado no es válido";
+    }
 
     // Validamos que la cantidad sea un número mayor a cero
     if ($cantidad !== "") {
@@ -76,12 +88,13 @@ if (isset($_POST["nombre"])) {
 
     <!-- Configuración básica de la página -->
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title><?php echo $titulo; ?> - ReciclaCDMX</title>
+    <title><?php echo escaparHTML($titulo); ?> - ReciclaCDMX</title>
 
     <!-- Conectamos nuestro archivo CSS -->
-    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="CSS/estilos.css">
 
 </head>
 
@@ -92,14 +105,8 @@ if (isset($_POST["nombre"])) {
 
         <h1>ReciclaCDMX</h1>
 
-        <!-- Menú de navegación -->
-        <nav>
-            <a href="index.php">Inicio</a>
-            <a href="centros.php">Centros de reciclaje</a>
-            <a href="consejos.php">Consejos</a>
-            <a href="materiales.php">Materiales</a>
-            <a href="registro.php">Registro</a>
-        </nav>
+        <!-- Incluimos el menú de navegación -->
+        <?php include "includes/nav.php"; ?>
 
     </header>
 
@@ -110,7 +117,7 @@ if (isset($_POST["nombre"])) {
         <!-- Título de la página -->
         <section class="titulo-pagina">
 
-            <h2><?php echo $titulo; ?></h2>
+            <h2><?php echo escaparHTML($titulo); ?></h2>
 
             <p>
                 Registra un material que deseas llevar a reciclar.
@@ -122,6 +129,35 @@ if (isset($_POST["nombre"])) {
             </p>
 
         </section>
+
+
+        <!-- Mostramos los errores arriba del formulario -->
+        <?php if ($formularioEnviado && !empty($errores)) { ?>
+
+            <section class="errores-formulario">
+
+                <h2>Revisa la información</h2>
+
+                <ul>
+
+                    <?php
+                    // Recorremos el arreglo de errores
+                    foreach ($errores as $error) {
+                    ?>
+
+                        <li>
+                            <?php echo escaparHTML($error); ?>
+                        </li>
+
+                    <?php
+                    }
+                    ?>
+
+                </ul>
+
+            </section>
+
+        <?php } ?>
 
 
         <!-- Formulario de registro -->
@@ -144,6 +180,7 @@ if (isset($_POST["nombre"])) {
                         id="nombre"
                         name="nombre"
                         placeholder="Ej. Luis"
+                        value="<?php echo escaparHTML($nombre); ?>"
                     >
                 </p>
 
@@ -160,6 +197,7 @@ if (isset($_POST["nombre"])) {
                         id="correo"
                         name="correo"
                         placeholder="Ej. usuario@correo.com"
+                        value="<?php echo escaparHTML($correo); ?>"
                     >
                 </p>
 
@@ -177,19 +215,23 @@ if (isset($_POST["nombre"])) {
                             Selecciona una opción
                         </option>
 
-                        <option value="Papel y cartón">
+                        <option value="Papel y cartón"
+                            <?php if ($material === "Papel y cartón") { echo "selected"; } ?>>
                             Papel y cartón
                         </option>
 
-                        <option value="Plástico">
+                        <option value="Plástico"
+                            <?php if ($material === "Plástico") { echo "selected"; } ?>>
                             Plástico
                         </option>
 
-                        <option value="Vidrio">
+                        <option value="Vidrio"
+                            <?php if ($material === "Vidrio") { echo "selected"; } ?>>
                             Vidrio
                         </option>
 
-                        <option value="Aluminio">
+                        <option value="Aluminio"
+                            <?php if ($material === "Aluminio") { echo "selected"; } ?>>
                             Aluminio
                         </option>
 
@@ -210,6 +252,7 @@ if (isset($_POST["nombre"])) {
                         name="cantidad"
                         step="0.1"
                         placeholder="Ej. 2.5"
+                        value="<?php echo escaparHTML($cantidad); ?>"
                     >
                 </p>
 
@@ -223,120 +266,48 @@ if (isset($_POST["nombre"])) {
         </section>
 
 
-        <?php
+        <!-- Confirmación cuando no existen errores -->
+        <?php if ($formularioEnviado && empty($errores)) { ?>
 
-        // Si el formulario fue enviado revisamos los resultados
-        if ($formularioEnviado) {
+            <section class="informacion">
 
-            // Si existen errores los mostramos
-            if (!empty($errores)) {
+                <h2>Material registrado</h2>
 
-        ?>
-
-                <!-- Sección donde mostramos los errores -->
-                <section class="informacion">
-
-                    <h2>Revisa la información</h2>
-
-                    <ul>
-
-                        <?php
-
-                        // Recorremos el arreglo de errores
-                        foreach ($errores as $error) {
-
-                        ?>
-
-                            <li>
-                                <?php echo htmlspecialchars($error, ENT_QUOTES, "UTF-8"); ?>
-                            </li>
-
-                        <?php
-
-                        }
-
-                        ?>
-
-                    </ul>
-
-                </section>
-
-        <?php
-
-            } else {
-
-        ?>
-
-                <!-- Si no hay errores mostramos la confirmación -->
-                <section class="informacion">
-
-                    <h2>Material registrado</h2>
-
-                    <p>
-                        La información fue recibida correctamente.
-                    </p>
-
-                    <p>
-                        <strong>Nombre:</strong>
-
-                        <?php
-                        echo htmlspecialchars(
-                            $nombre,
-                            ENT_QUOTES,
-                            "UTF-8"
-                        );
-                        ?>
-                    </p>
+                <p>
+                    La información fue recibida correctamente.
+                </p>
 
 
-                    <p>
-                        <strong>Correo:</strong>
+                <p>
+                    <strong>Nombre:</strong>
 
-                        <?php
-                        echo htmlspecialchars(
-                            $correo,
-                            ENT_QUOTES,
-                            "UTF-8"
-                        );
-                        ?>
-                    </p>
+                    <?php echo escaparHTML($nombre); ?>
+                </p>
 
 
-                    <p>
-                        <strong>Material:</strong>
+                <p>
+                    <strong>Correo:</strong>
 
-                        <?php
-                        echo htmlspecialchars(
-                            $material,
-                            ENT_QUOTES,
-                            "UTF-8"
-                        );
-                        ?>
-                    </p>
+                    <?php echo escaparHTML($correo); ?>
+                </p>
 
 
-                    <p>
-                        <strong>Cantidad aproximada:</strong>
+                <p>
+                    <strong>Material:</strong>
 
-                        <?php
-                        echo htmlspecialchars(
-                            $cantidad,
-                            ENT_QUOTES,
-                            "UTF-8"
-                        );
-                        ?>
+                    <?php echo escaparHTML($material); ?>
+                </p>
 
-                        kg
-                    </p>
 
-                </section>
+                <p>
+                    <strong>Cantidad aproximada:</strong>
 
-        <?php
+                    <?php echo escaparHTML($cantidad); ?> kg
+                </p>
 
-            }
-        }
+            </section>
 
-        ?>
+        <?php } ?>
 
 
         <!-- Información adicional -->
@@ -354,12 +325,8 @@ if (isset($_POST["nombre"])) {
     </main>
 
 
-    <!-- Pie de página -->
-    <footer>
-
-        <p>ReciclaCDMX - Programación Web</p>
-
-    </footer>
+    <!-- Incluimos el pie de página -->
+    <?php include "includes/footer.php"; ?>
 
 </body>
 

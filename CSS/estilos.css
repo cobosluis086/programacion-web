@@ -343,3 +343,22 @@ form button {
 form button:hover {
     background-color: #246f47;
 }
+
+
+/* Mensajes de error del formulario */
+.errores-formulario {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #e0a4aa;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.errores-formulario h2 {
+    margin-bottom: 10px;
+}
+
+.errores-formulario ul {
+    padding-left: 25px;
+}

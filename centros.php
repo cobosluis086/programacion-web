@@ -1,4 +1,8 @@
+
 <?php
+
+// Incluimos las funciones de nuestro proyecto
+require_once "includes/funciones.php";
 
 // Variable que guarda el título de la página
 $titulo = "Centros de reciclaje";
@@ -8,6 +12,7 @@ $titulo = "Centros de reciclaje";
 $centros = [
 
     [
+        "id" => "polanco",
         "nombre" => "Centro de Reciclaje Polanco",
         "zona" => "Miguel Hidalgo",
         "materiales" => "Papel, cartón, plástico y vidrio",
@@ -15,6 +20,7 @@ $centros = [
     ],
 
     [
+        "id" => "chapultepec",
         "nombre" => "Punto Verde Chapultepec",
         "zona" => "Miguel Hidalgo",
         "materiales" => "Plástico, aluminio y papel",
@@ -22,6 +28,7 @@ $centros = [
     ],
 
     [
+        "id" => "ecologico",
         "nombre" => "Centro Ecológico CDMX",
         "zona" => "Benito Juárez",
         "materiales" => "Cartón, vidrio y electrónicos",
@@ -29,6 +36,7 @@ $centros = [
     ],
 
     [
+        "id" => "coyoacan",
         "nombre" => "Punto de Reciclaje Coyoacán",
         "zona" => "Coyoacán",
         "materiales" => "Papel, plástico, vidrio y aluminio",
@@ -48,7 +56,7 @@ $centros = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title><?php echo $titulo; ?> - ReciclaCDMX</title>
+    <title><?php echo escaparHTML($titulo); ?> - ReciclaCDMX</title>
 
     <!-- Archivo de estilos -->
     <link rel="stylesheet" href="css/estilos.css">
@@ -63,13 +71,7 @@ $centros = [
         <h1>ReciclaCDMX</h1>
 
         <!-- Menú de navegación -->
-        <nav>
-            <a href="index.php">Inicio</a>
-            <a href="centros.php">Centros de reciclaje</a>
-            <a href="consejos.php">Consejos</a>
-            <a href="materiales.php">Materiales</a>
-            <a href="registro.php">Registro</a>
-        </nav>
+        <?php include "includes/nav.php"; ?>
 
     </header>
 
@@ -79,7 +81,7 @@ $centros = [
         <!-- Primera sección: introducción -->
         <section class="titulo-pagina">
 
-            <h2><?php echo $titulo; ?></h2>
+            <h2><?php echo escaparHTML($titulo); ?></h2>
 
             <p>
                 Consulta algunos centros donde puedes llevar
@@ -98,10 +100,8 @@ $centros = [
         <section class="centros">
 
             <?php
-
             // foreach recorre todos los centros guardados en el arreglo
             foreach ($centros as $centro) {
-
             ?>
 
                 <!-- Se crea una tarjeta por cada centro -->
@@ -109,49 +109,49 @@ $centros = [
 
                     <!-- Mostramos el nombre del centro -->
                     <h3>
-                        <?php echo $centro["nombre"]; ?>
+                        <?php echo escaparHTML($centro["nombre"]); ?>
                     </h3>
 
                     <!-- Mostramos la zona -->
                     <p>
                         <strong>Zona:</strong>
-                        <?php echo $centro["zona"]; ?>
+                        <?php echo escaparHTML($centro["zona"]); ?>
                     </p>
 
                     <!-- Mostramos los materiales -->
                     <p>
                         <strong>Materiales:</strong>
-                        <?php echo $centro["materiales"]; ?>
+                        <?php echo escaparHTML($centro["materiales"]); ?>
                     </p>
 
 
-                    <?php
+                    <!-- Comprobamos si el centro está disponible -->
+                    <?php if ($centro["disponible"]) { ?>
 
-                    // Comprobamos si el centro está disponible
-                    if ($centro["disponible"]) {
+                        <p>
+                            <strong>Estado:</strong>
+                            Disponible
+                        </p>
 
-                        echo "<p><strong>Estado:</strong> Disponible</p>";
+                    <?php } else { ?>
 
-                    } else {
+                        <p>
+                            <strong>Estado:</strong>
+                            Temporalmente no disponible
+                        </p>
 
-                        echo "<p><strong>Estado:</strong> Temporalmente no disponible</p>";
-
-                    }
-
-                    ?>
+                    <?php } ?>
 
 
                     <!-- Enlace a la página con más información -->
-                    <a class="boton" href="detalle.php">
+                    <a class="boton" href="detalle.php?centro=<?php echo urlencode($centro["id"]); ?>">
                         Ver detalles
                     </a>
 
                 </div>
 
             <?php
-
             }
-
             ?>
 
         </section>
@@ -174,11 +174,7 @@ $centros = [
 
 
     <!-- Pie de página -->
-    <footer>
-
-        <p>ReciclaCDMX - Programación Web</p>
-
-    </footer>
+    <?php include "includes/footer.php"; ?>
 
 </body>
 

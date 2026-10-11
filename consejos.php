@@ -1,4 +1,8 @@
+
 <?php
+
+// Incluimos las funciones de nuestro proyecto
+require_once "includes/funciones.php";
 
 // Variable que guarda el título de la página
 $titulo = "Consejos para reciclar";
@@ -43,7 +47,7 @@ $mostrarRecomendacion = true;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title><?php echo $titulo; ?> - ReciclaCDMX</title>
+    <title><?php echo escaparHTML($titulo); ?> - ReciclaCDMX</title>
 
     <!-- Conectamos el archivo CSS -->
     <link rel="stylesheet" href="css/estilos.css">
@@ -58,13 +62,7 @@ $mostrarRecomendacion = true;
         <h1>ReciclaCDMX</h1>
 
         <!-- Menú de navegación -->
-        <nav>
-            <a href="index.php">Inicio</a>
-            <a href="centros.php">Centros de reciclaje</a>
-            <a href="consejos.php">Consejos</a>
-            <a href="materiales.php">Materiales</a>
-            <a href="registro.php">Registro</a>
-        </nav>
+        <?php include "includes/nav.php"; ?>
 
     </header>
 
@@ -76,7 +74,7 @@ $mostrarRecomendacion = true;
         <section class="titulo-pagina">
 
             <!-- Mostramos el título utilizando PHP -->
-            <h2><?php echo $titulo; ?></h2>
+            <h2><?php echo escaparHTML($titulo); ?></h2>
 
             <p>
                 Con pequeñas acciones podemos ayudar a reducir residuos
@@ -95,10 +93,8 @@ $mostrarRecomendacion = true;
         <section class="consejos">
 
             <?php
-
             // foreach recorre todos los consejos del arreglo
             foreach ($consejos as $consejo) {
-
             ?>
 
                 <!-- Se crea una tarjeta por cada consejo -->
@@ -106,20 +102,18 @@ $mostrarRecomendacion = true;
 
                     <!-- Mostramos el título del consejo -->
                     <h3>
-                        <?php echo $consejo["titulo"]; ?>
+                        <?php echo escaparHTML($consejo["titulo"]); ?>
                     </h3>
 
                     <!-- Mostramos la descripción -->
                     <p>
-                        <?php echo $consejo["descripcion"]; ?>
+                        <?php echo escaparHTML($consejo["descripcion"]); ?>
                     </p>
 
                 </div>
 
             <?php
-
             }
-
             ?>
 
         </section>
@@ -130,20 +124,21 @@ $mostrarRecomendacion = true;
 
             <h2>Una recomendación más</h2>
 
-            <?php
+            <!-- Utilizamos una condición para mostrar una recomendación -->
+            <?php if ($mostrarRecomendacion) { ?>
 
-            // Utilizamos una condición para mostrar una recomendación
-            if ($mostrarRecomendacion) {
+                <p>
+                    No necesitas cambiar todos tus hábitos de un día para otro.
+                    Puedes comenzar separando papel, plástico, vidrio y aluminio.
+                </p>
 
-                echo "<p>No necesitas cambiar todos tus hábitos de un día para otro. Puedes comenzar separando papel, plástico, vidrio y aluminio.</p>";
+            <?php } else { ?>
 
-            } else {
+                <p>
+                    Consulta nuestros consejos para aprender más sobre reciclaje.
+                </p>
 
-                echo "<p>Consulta nuestros consejos para aprender más sobre reciclaje.</p>";
-
-            }
-
-            ?>
+            <?php } ?>
 
         </section>
 
@@ -151,11 +146,7 @@ $mostrarRecomendacion = true;
 
 
     <!-- Pie de página -->
-    <footer>
-
-        <p>ReciclaCDMX - Programación Web</p>
-
-    </footer>
+    <?php include "includes/footer.php"; ?>
 
 </body>
 

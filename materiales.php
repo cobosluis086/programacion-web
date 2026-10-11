@@ -1,73 +1,42 @@
+
 <?php
 
-// Variable que guarda el título de la página
+// Incluimos las funciones de nuestro proyecto
+require_once "includes/funciones.php";
+
+// Título de la página
 $titulo = "Materiales reciclables";
 
+// Obtenemos los materiales utilizando una función
+$materiales = obtenerMateriales();
 
-// Arreglo que guarda los materiales reciclables
-// Cada material tiene nombre, descripción y un símbolo visual
-$materiales = [
-
-    [
-        "nombre" => "Papel y cartón",
-        "descripcion" => "Periódicos, hojas, cajas y otros productos de papel pueden ser reciclados.",
-        "simbolo" => "📦"
-    ],
-
-    [
-        "nombre" => "Plástico",
-        "descripcion" => "Botellas y algunos envases de plástico pueden separarse para reciclar.",
-        "simbolo" => "🧴"
-    ],
-
-    [
-        "nombre" => "Vidrio",
-        "descripcion" => "Botellas y frascos de vidrio pueden reutilizarse o reciclarse.",
-        "simbolo" => "🍾"
-    ],
-
-    [
-        "nombre" => "Aluminio",
-        "descripcion" => "Las latas de bebidas son uno de los materiales que pueden reciclarse.",
-        "simbolo" => "🥫"
-    ]
-
-];
-
-
-// Variables que utilizaremos para realizar la búsqueda
+// Variables para controlar la búsqueda
 $busquedaRealizada = false;
 $encontrado = false;
 $resultado = [];
+$materialBusqueda = "";
 
-
-// Verificamos si el dato material fue enviado mediante GET
+// Verificamos si se envió un material mediante GET
 if (isset($_GET["material"])) {
 
-    // Indicamos que el usuario realizó una búsqueda
     $busquedaRealizada = true;
 
-    // Guardamos el material que escribió el usuario
+    // Limpiamos el texto recibido
     $materialBusqueda = trim($_GET["material"]);
 
+    // Buscamos el material utilizando una función
+    $materialEncontrado = buscarMaterial(
+        $materiales,
+        $materialBusqueda
+    );
 
-    // Recorremos todos los materiales guardados en el arreglo
-    foreach ($materiales as $material) {
-
-        // Comparamos el nombre del material con la búsqueda
-        if ($material["nombre"] == $materialBusqueda) {
-
-            // Guardamos la información del material encontrado
-            $resultado = $material;
-
-            // Indicamos que encontramos una coincidencia
-            $encontrado = true;
-        }
+    if ($materialEncontrado !== null) {
+        $resultado = $materialEncontrado;
+        $encontrado = true;
     }
 }
 
-
-// Variable que utilizaremos en una condición
+// Variable utilizada para mostrar recomendaciones
 $separarMateriales = true;
 
 ?>
@@ -81,7 +50,7 @@ $separarMateriales = true;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title><?php echo $titulo; ?> - ReciclaCDMX</title>
+    <title><?php echo escaparHTML($titulo); ?> - ReciclaCDMX</title>
 
     <!-- Conectamos nuestro archivo CSS -->
     <link rel="stylesheet" href="css/estilos.css">
@@ -96,13 +65,7 @@ $separarMateriales = true;
         <h1>ReciclaCDMX</h1>
 
         <!-- Menú de navegación -->
-        <nav>
-            <a href="index.php">Inicio</a>
-            <a href="centros.php">Centros de reciclaje</a>
-            <a href="consejos.php">Consejos</a>
-            <a href="materiales.php">Materiales</a>
-            <a href="registro.php">Registro</a>
-        </nav>
+        <?php include "includes/nav.php"; ?>
 
     </header>
 
@@ -114,7 +77,7 @@ $separarMateriales = true;
         <section class="titulo-pagina">
 
             <!-- Mostramos el título utilizando PHP -->
-            <h2><?php echo $titulo; ?></h2>
+            <h2><?php echo escaparHTML($titulo); ?></h2>
 
             <p>
                 Algunos materiales pueden separarse y llevarse
@@ -148,6 +111,7 @@ $separarMateriales = true;
                     id="material"
                     name="material"
                     placeholder="Ej. Plástico"
+                    value="<?php echo escaparHTML($materialBusqueda); ?>"
                 >
 
                 <button type="submit">
@@ -159,15 +123,11 @@ $separarMateriales = true;
         </section>
 
 
-        <?php
+        <!-- Comprobamos si el usuario realizó una búsqueda -->
+        <?php if ($busquedaRealizada) { ?>
 
-        // Comprobamos si el usuario ya realizó una búsqueda
-        if ($busquedaRealizada) {
-
-            // Si encontramos el material mostramos su información
-            if ($encontrado) {
-
-        ?>
+            <!-- Si encontramos el material mostramos su información -->
+            <?php if ($encontrado) { ?>
 
                 <!-- Resultado de la búsqueda -->
                 <section class="informacion">
@@ -176,44 +136,22 @@ $separarMateriales = true;
 
                     <!-- Mostramos el símbolo del material -->
                     <div class="icono-material">
-                        <?php
-                        echo htmlspecialchars(
-                            $resultado["simbolo"],
-                            ENT_QUOTES,
-                            "UTF-8"
-                        );
-                        ?>
+                        <?php echo escaparHTML($resultado["simbolo"]); ?>
                     </div>
 
                     <!-- Mostramos el nombre del material -->
                     <h3>
-                        <?php
-                        echo htmlspecialchars(
-                            $resultado["nombre"],
-                            ENT_QUOTES,
-                            "UTF-8"
-                        );
-                        ?>
+                        <?php echo escaparHTML($resultado["nombre"]); ?>
                     </h3>
 
                     <!-- Mostramos la descripción del material -->
                     <p>
-                        <?php
-                        echo htmlspecialchars(
-                            $resultado["descripcion"],
-                            ENT_QUOTES,
-                            "UTF-8"
-                        );
-                        ?>
+                        <?php echo escaparHTML($resultado["descripcion"]); ?>
                     </p>
 
                 </section>
 
-        <?php
-
-            } else {
-
-        ?>
+            <?php } else { ?>
 
                 <!-- Mensaje cuando no encontramos coincidencias -->
                 <section class="informacion">
@@ -226,22 +164,17 @@ $separarMateriales = true;
 
                 </section>
 
-        <?php
+            <?php } ?>
 
-            }
-        }
-
-        ?>
+        <?php } ?>
 
 
         <!-- Segunda sección: materiales -->
         <section class="materiales">
 
             <?php
-
             // foreach recorre todos los materiales del arreglo
             foreach ($materiales as $material) {
-
             ?>
 
                 <!-- Creamos una tarjeta por cada material -->
@@ -249,25 +182,23 @@ $separarMateriales = true;
 
                     <!-- Recurso visual del material -->
                     <div class="icono-material">
-                        <?php echo $material["simbolo"]; ?>
+                        <?php echo escaparHTML($material["simbolo"]); ?>
                     </div>
 
                     <!-- Nombre del material -->
                     <h3>
-                        <?php echo $material["nombre"]; ?>
+                        <?php echo escaparHTML($material["nombre"]); ?>
                     </h3>
 
                     <!-- Descripción del material -->
                     <p>
-                        <?php echo $material["descripcion"]; ?>
+                        <?php echo escaparHTML($material["descripcion"]); ?>
                     </p>
 
                 </div>
 
             <?php
-
             }
-
             ?>
 
         </section>
@@ -278,20 +209,21 @@ $separarMateriales = true;
 
             <h2>¿Cómo preparar los materiales?</h2>
 
-            <?php
+            <!-- La condición determina qué mensaje se muestra -->
+            <?php if ($separarMateriales) { ?>
 
-            // La condición determina qué mensaje se muestra
-            if ($separarMateriales) {
+                <p>
+                    Antes de llevar los materiales a reciclar,
+                    procura separarlos, limpiarlos y mantenerlos secos.
+                </p>
 
-                echo "<p>Antes de llevar los materiales a reciclar, procura separarlos, limpiarlos y mantenerlos secos.</p>";
+            <?php } else { ?>
 
-            } else {
+                <p>
+                    Consulta las recomendaciones para preparar tus materiales.
+                </p>
 
-                echo "<p>Consulta las recomendaciones para preparar tus materiales.</p>";
-
-            }
-
-            ?>
+            <?php } ?>
 
         </section>
 
@@ -299,11 +231,7 @@ $separarMateriales = true;
 
 
     <!-- Pie de página -->
-    <footer>
-
-        <p>ReciclaCDMX - Programación Web</p>
-
-    </footer>
+    <?php include "includes/footer.php"; ?>
 
 </body>
 

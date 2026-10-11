@@ -1,4 +1,8 @@
+
 <?php
+
+// Incluimos las funciones de nuestro proyecto
+require_once "includes/funciones.php";
 
 // Variable que guarda el nombre de la página
 $titulo = "ReciclaCDMX";
@@ -31,7 +35,7 @@ $mostrarMensaje = true;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Mostramos con PHP el contenido de la variable $titulo -->
-    <title><?php echo $titulo; ?></title>
+    <title><?php echo escaparHTML($titulo); ?></title>
 
     <!-- Conectamos nuestro archivo CSS -->
     <link rel="stylesheet" href="css/estilos.css">
@@ -44,17 +48,10 @@ $mostrarMensaje = true;
     <header>
 
         <!-- PHP muestra el nombre guardado en la variable $titulo -->
-        <h1><?php echo $titulo; ?></h1>
+        <h1><?php echo escaparHTML($titulo); ?></h1>
 
         <!-- Menú de navegación -->
-        <nav>
-            <a href="index.php">Inicio</a>
-            <a href="centros.php">Centros de reciclaje</a>
-            <a href="consejos.php">Consejos</a>
-            <a href="materiales.php">Materiales</a>
-            <a href="registro.php">Registro</a>
-
-        </nav>
+        <?php include "includes/nav.php"; ?>
 
     </header>
 
@@ -62,35 +59,38 @@ $mostrarMensaje = true;
     <!-- Contenido principal -->
     <main>
 
-    <!-- Sección principal de la página -->
-    <section class="inicio">
+        <!-- Sección principal de la página -->
+        <section class="inicio">
 
-    <!-- Parte izquierda -->
-        <div class="inicio-texto">
+            <!-- Parte izquierda -->
+            <div class="inicio-texto">
 
-        <h2><?php echo $mensaje; ?></h2>
+                <h2><?php echo escaparHTML($mensaje); ?></h2>
 
-        <p>
-            ReciclaCDMX es un sitio creado para ayudar a las personas
-            a conocer lugares donde pueden llevar diferentes tipos
-            de residuos para su correcto reciclaje.
-        </p>
+                <p>
+                    ReciclaCDMX es un sitio creado para ayudar a las personas
+                    a conocer lugares donde pueden llevar diferentes tipos
+                    de residuos para su correcto reciclaje.
+                </p>
 
-        <a class="boton" href="centros.php">
-            Consultar centros de reciclaje →
-        </a>
+                <a class="boton" href="centros.php">
+                    Consultar centros de reciclaje →
+                </a>
 
-        </div>
+            </div>
 
-    <!-- Parte derecha: imagen -->
-    <div class="inicio-imagen">
 
-        <img src="img/reciclaje.png"
-             alt="Contenedores para separar materiales reciclables">
+            <!-- Parte derecha: imagen -->
+            <div class="inicio-imagen">
 
-    </div>
+                <img
+                    src="img/reciclaje.png"
+                    alt="Contenedores para separar materiales reciclables"
+                >
 
-    </section>
+            </div>
+
+        </section>
 
 
         <!-- Segunda sección -->
@@ -105,15 +105,18 @@ $mostrarMensaje = true;
             </p>
 
             <?php
-
             // Utilizamos un if para comprobar si la variable es verdadera
             if ($mostrarMensaje) {
+            ?>
 
-                // Si es verdadera, mostramos este mensaje
-                echo "<p><strong>Recuerda:</strong> pequeñas acciones pueden generar grandes cambios.</p>";
+                <!-- Si es verdadera, mostramos este mensaje -->
+                <p>
+                    <strong>Recuerda:</strong>
+                    pequeñas acciones pueden generar grandes cambios.
+                </p>
 
+            <?php
             }
-
             ?>
 
         </section>
@@ -132,15 +135,17 @@ $mostrarMensaje = true;
             <ul>
 
                 <?php
-
                 // foreach recorre todos los elementos del arreglo $beneficios
                 foreach ($beneficios as $beneficio) {
+                ?>
 
-                    // Por cada beneficio se crea un elemento de la lista
-                    echo "<li>$beneficio</li>";
+                    <!-- Por cada beneficio se crea un elemento de la lista -->
+                    <li>
+                        <?php echo escaparHTML($beneficio); ?>
+                    </li>
 
+                <?php
                 }
-
                 ?>
 
             </ul>
@@ -151,11 +156,7 @@ $mostrarMensaje = true;
 
 
     <!-- Pie de página -->
-    <footer>
-
-        <p>ReciclaCDMX - Programación Web</p>
-
-    </footer>
+    <?php include "includes/footer.php"; ?>
 
 </body>
 
