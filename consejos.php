@@ -1,14 +1,12 @@
-
 <?php
 
-// Incluimos las funciones de nuestro proyecto
+require_once __DIR__ . "/includes/sesion.php";
 require_once "includes/funciones.php";
 
-// Variable que guarda el título de la página
+
 $titulo = "Consejos para reciclar";
 
-// Arreglo que guarda los consejos de reciclaje
-// Cada consejo tiene un título y una descripción
+
 $consejos = [
 
     [
@@ -33,7 +31,6 @@ $consejos = [
 
 ];
 
-// Variable para mostrar una recomendación adicional
 $mostrarRecomendacion = true;
 
 ?>
@@ -43,37 +40,31 @@ $mostrarRecomendacion = true;
 
 <head>
 
-    <!-- Configuración básica de la página -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title><?php echo escaparHTML($titulo); ?> - ReciclaCDMX</title>
 
-    <!-- Conectamos el archivo CSS -->
-    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="CSS/estilos.css">
+
 
 </head>
 
 <body>
 
-    <!-- Encabezado -->
     <header>
 
         <h1>ReciclaCDMX</h1>
 
-        <!-- Menú de navegación -->
         <?php include "includes/nav.php"; ?>
 
     </header>
 
 
-    <!-- Contenido principal -->
     <main>
 
-        <!-- Primera sección -->
         <section class="titulo-pagina">
 
-            <!-- Mostramos el título utilizando PHP -->
             <h2><?php echo escaparHTML($titulo); ?></h2>
 
             <p>
@@ -89,23 +80,18 @@ $mostrarRecomendacion = true;
         </section>
 
 
-        <!-- Segunda sección: tarjetas de consejos -->
         <section class="consejos">
 
             <?php
-            // foreach recorre todos los consejos del arreglo
             foreach ($consejos as $consejo) {
             ?>
 
-                <!-- Se crea una tarjeta por cada consejo -->
                 <div class="tarjeta">
 
-                    <!-- Mostramos el título del consejo -->
                     <h3>
                         <?php echo escaparHTML($consejo["titulo"]); ?>
                     </h3>
 
-                    <!-- Mostramos la descripción -->
                     <p>
                         <?php echo escaparHTML($consejo["descripcion"]); ?>
                     </p>
@@ -119,12 +105,10 @@ $mostrarRecomendacion = true;
         </section>
 
 
-        <!-- Tercera sección -->
         <section class="informacion">
 
             <h2>Una recomendación más</h2>
 
-            <!-- Utilizamos una condición para mostrar una recomendación -->
             <?php if ($mostrarRecomendacion) { ?>
 
                 <p>
@@ -145,7 +129,6 @@ $mostrarRecomendacion = true;
     </main>
 
 
-    <!-- Pie de página -->
     <?php include "includes/footer.php"; ?>
 
 </body>

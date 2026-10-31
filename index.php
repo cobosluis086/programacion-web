@@ -1,17 +1,13 @@
-
 <?php
 
-// Incluimos las funciones de nuestro proyecto
+require_once __DIR__ . "/includes/sesion.php";
 require_once "includes/funciones.php";
 
-// Variable que guarda el nombre de la página
 $titulo = "ReciclaCDMX";
 
-// Variable que guarda el mensaje principal
 $mensaje = "Reciclar también es cuidar nuestra ciudad";
 
-// Arreglo que guarda diferentes beneficios del reciclaje
-// El arreglo tiene 4 elementos como pide la actividad
+
 $beneficios = [
     "Reduce la cantidad de basura que generamos.",
     "Permite aprovechar nuevamente algunos materiales.",
@@ -19,8 +15,7 @@ $beneficios = [
     "Contribuye al cuidado del medio ambiente."
 ];
 
-// Variable de tipo booleano (verdadero o falso)
-// La utilizaremos más adelante en una condición
+
 $mostrarMensaje = true;
 
 ?>
@@ -30,39 +25,30 @@ $mostrarMensaje = true;
 
 <head>
 
-    <!-- Configuración básica de la página -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Mostramos con PHP el contenido de la variable $titulo -->
     <title><?php echo escaparHTML($titulo); ?></title>
 
-    <!-- Conectamos nuestro archivo CSS -->
-    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="CSS/estilos.css">
 
 </head>
 
 <body>
 
-    <!-- Encabezado de la página -->
     <header>
 
-        <!-- PHP muestra el nombre guardado en la variable $titulo -->
         <h1><?php echo escaparHTML($titulo); ?></h1>
 
-        <!-- Menú de navegación -->
         <?php include "includes/nav.php"; ?>
 
     </header>
 
 
-    <!-- Contenido principal -->
     <main>
 
-        <!-- Sección principal de la página -->
         <section class="inicio">
 
-            <!-- Parte izquierda -->
             <div class="inicio-texto">
 
                 <h2><?php echo escaparHTML($mensaje); ?></h2>
@@ -80,7 +66,6 @@ $mostrarMensaje = true;
             </div>
 
 
-            <!-- Parte derecha: imagen -->
             <div class="inicio-imagen">
 
                 <img
@@ -93,7 +78,6 @@ $mostrarMensaje = true;
         </section>
 
 
-        <!-- Segunda sección -->
         <section class="informacion">
 
             <h2>¿Por qué reciclar?</h2>
@@ -105,11 +89,9 @@ $mostrarMensaje = true;
             </p>
 
             <?php
-            // Utilizamos un if para comprobar si la variable es verdadera
             if ($mostrarMensaje) {
             ?>
 
-                <!-- Si es verdadera, mostramos este mensaje -->
                 <p>
                     <strong>Recuerda:</strong>
                     pequeñas acciones pueden generar grandes cambios.
@@ -122,7 +104,6 @@ $mostrarMensaje = true;
         </section>
 
 
-        <!-- Tercera sección -->
         <section class="informacion">
 
             <h2>Beneficios del reciclaje</h2>
@@ -135,11 +116,9 @@ $mostrarMensaje = true;
             <ul>
 
                 <?php
-                // foreach recorre todos los elementos del arreglo $beneficios
                 foreach ($beneficios as $beneficio) {
                 ?>
 
-                    <!-- Por cada beneficio se crea un elemento de la lista -->
                     <li>
                         <?php echo escaparHTML($beneficio); ?>
                     </li>

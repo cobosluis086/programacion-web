@@ -1,36 +1,30 @@
-
 <?php
 
-// Incluimos las funciones del proyecto
 require_once "includes/funciones.php";
 
-// Variable que guarda el título de la página
+require_once "includes/sesion.php";
+protegerPagina();
+
 $titulo = "Registro de material";
 
-// Variable de tipo bandera para saber si se envió el formulario
 $formularioEnviado = false;
 
-// Arreglo donde guardaremos los errores
 $errores = [];
 
-// Variables para guardar la información del formulario
 $nombre = "";
 $correo = "";
 $material = "";
 $cantidad = "";
 
-// Verificamos si el formulario fue enviado mediante POST
 if (isset($_POST["nombre"])) {
 
     $formularioEnviado = true;
 
-    // Recuperamos los datos enviados desde el formulario
     $nombre = trim($_POST["nombre"]);
     $correo = trim($_POST["correo"] ?? "");
     $material = $_POST["material"] ?? "";
     $cantidad = trim($_POST["cantidad"] ?? "");
 
-    // Validamos que los campos no estén vacíos
     if (empty($nombre)) {
         $errores[] = "El nombre es obligatorio";
     }
@@ -47,24 +41,20 @@ if (isset($_POST["nombre"])) {
         $errores[] = "La cantidad es obligatoria";
     }
 
-    // Validamos que el nombre tenga al menos 3 caracteres
     if (!empty($nombre) && strlen($nombre) < 3) {
         $errores[] = "El nombre debe tener al menos 3 caracteres";
     }
 
-    // Validamos que el correo tenga un formato correcto
     if (!empty($correo) && !filter_var($correo, FILTER_VALIDATE_EMAIL)) {
         $errores[] = "El correo no tiene un formato válido";
     }
 
-    // Validamos que el material sea una opción disponible
     $materiales = obtenerMateriales();
 
     if ($material !== "" && buscarMaterial($materiales, $material) === null) {
         $errores[] = "El material seleccionado no es válido";
     }
 
-    // Validamos que la cantidad sea un número mayor a cero
     if ($cantidad !== "") {
 
         if (!is_numeric($cantidad)) {
@@ -86,35 +76,29 @@ if (isset($_POST["nombre"])) {
 
 <head>
 
-    <!-- Configuración básica de la página -->
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title><?php echo escaparHTML($titulo); ?> - ReciclaCDMX</title>
 
-    <!-- Conectamos nuestro archivo CSS -->
     <link rel="stylesheet" href="CSS/estilos.css">
 
 </head>
 
 <body>
 
-    <!-- Encabezado de la página -->
     <header>
 
         <h1>ReciclaCDMX</h1>
 
-        <!-- Incluimos el menú de navegación -->
         <?php include "includes/nav.php"; ?>
 
     </header>
 
 
-    <!-- Contenido principal -->
     <main>
 
-        <!-- Título de la página -->
         <section class="titulo-pagina">
 
             <h2><?php echo escaparHTML($titulo); ?></h2>
@@ -131,7 +115,6 @@ if (isset($_POST["nombre"])) {
         </section>
 
 
-        <!-- Mostramos los errores arriba del formulario -->
         <?php if ($formularioEnviado && !empty($errores)) { ?>
 
             <section class="errores-formulario">
@@ -141,7 +124,6 @@ if (isset($_POST["nombre"])) {
                 <ul>
 
                     <?php
-                    // Recorremos el arreglo de errores
                     foreach ($errores as $error) {
                     ?>
 
@@ -160,12 +142,10 @@ if (isset($_POST["nombre"])) {
         <?php } ?>
 
 
-        <!-- Formulario de registro -->
         <section class="informacion">
 
             <h2>Datos del material</h2>
 
-            <!-- El formulario utiliza POST para enviar la información -->
             <form action="registro.php" method="POST">
 
                 <p>
@@ -266,7 +246,6 @@ if (isset($_POST["nombre"])) {
         </section>
 
 
-        <!-- Confirmación cuando no existen errores -->
         <?php if ($formularioEnviado && empty($errores)) { ?>
 
             <section class="informacion">
@@ -310,7 +289,6 @@ if (isset($_POST["nombre"])) {
         <?php } ?>
 
 
-        <!-- Información adicional -->
         <section class="informacion">
 
             <h2>Importante</h2>
@@ -325,7 +303,6 @@ if (isset($_POST["nombre"])) {
     </main>
 
 
-    <!-- Incluimos el pie de página -->
     <?php include "includes/footer.php"; ?>
 
 </body>

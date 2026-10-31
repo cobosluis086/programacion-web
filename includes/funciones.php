@@ -1,4 +1,3 @@
-
 <?php
 
 // Función para mostrar texto de forma segura
@@ -43,4 +42,3 @@ function buscarMaterial($materiales, $nombre) {
     return null;
 }
 
-?>

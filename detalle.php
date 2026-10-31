@@ -1,10 +1,9 @@
-
 <?php
 
-// Incluimos las funciones de nuestro proyecto
+require_once __DIR__ . "/includes/sesion.php";
 require_once "includes/funciones.php";
 
-// Arreglo que guarda la información de los centros
+
 $centros = [
 
     "polanco" => [
@@ -42,29 +41,23 @@ $centros = [
 ];
 
 
-// Revisamos si recibimos el nombre de un centro desde la URL
 if (isset($_GET["centro"])) {
 
-    // Guardamos el centro recibido en una variable
     $seleccion = $_GET["centro"];
 
 } else {
 
-    // Si no recibimos ninguno, mostramos Polanco
     $seleccion = "polanco";
 
 }
 
 
-// Revisamos que el centro seleccionado exista
 if (isset($centros[$seleccion])) {
 
-    // Guardamos la información del centro seleccionado
     $centro = $centros[$seleccion];
 
 } else {
 
-    // Si el centro no existe, mostramos Polanco
     $centro = $centros["polanco"];
 
 }
@@ -76,38 +69,30 @@ if (isset($centros[$seleccion])) {
 
 <head>
 
-    <!-- Configuración básica -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- PHP coloca automáticamente el nombre del centro -->
     <title><?php echo escaparHTML($centro["nombre"]); ?> - ReciclaCDMX</title>
 
-    <!-- Archivo CSS -->
-    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="CSS/estilos.css">
 
 </head>
 
 <body>
 
-    <!-- Encabezado -->
     <header>
 
         <h1>ReciclaCDMX</h1>
 
-        <!-- Menú de navegación -->
         <?php include "includes/nav.php"; ?>
 
     </header>
 
 
-    <!-- Contenido principal -->
     <main>
 
-        <!-- Primera sección -->
         <section class="detalle-centro">
 
-            <!-- Mostramos el nombre del centro seleccionado -->
             <h2><?php echo escaparHTML($centro["nombre"]); ?></h2>
 
             <p>
@@ -115,18 +100,16 @@ if (isset($centros[$seleccion])) {
                 y busca facilitar su correcta separación y recolección.
             </p>
 
-            <!-- Imagen del centro de reciclaje -->
             <img
                 class="imagen-centro"
-                src="img/centro-reciclaje.jpg"
-                alt="Centro de reciclaje"
+                src="img/reciclaje.png"
+                alt="Imagen del centro de reciclaje"
             >
 
             <h3>Información del centro</h3>
 
             <ul>
 
-                <!-- Mostramos la información guardada en el arreglo -->
                 <li>
                     <strong>Zona:</strong>
                     <?php echo escaparHTML($centro["zona"]); ?>
@@ -152,7 +135,6 @@ if (isset($centros[$seleccion])) {
         </section>
 
 
-        <!-- Segunda sección -->
         <section class="informacion">
 
             <h2>Recomendaciones</h2>
@@ -162,7 +144,6 @@ if (isset($centros[$seleccion])) {
                 y separados antes de entregarlos.
             </p>
 
-            <!-- Condición para mostrar un mensaje dependiendo de la zona -->
             <?php if ($centro["zona"] == "Miguel Hidalgo") { ?>
 
                 <p>
@@ -177,7 +158,6 @@ if (isset($centros[$seleccion])) {
 
             <?php } ?>
 
-            <!-- Botón para regresar -->
             <a class="boton" href="centros.php">
                 Regresar a centros
             </a>
@@ -187,7 +167,6 @@ if (isset($centros[$seleccion])) {
     </main>
 
 
-    <!-- Pie de página -->
     <?php include "includes/footer.php"; ?>
 
 </body>

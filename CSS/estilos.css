@@ -1,4 +1,3 @@
-/* Estilos generales */
 * {
     box-sizing: border-box;
 }
@@ -10,8 +9,6 @@ body {
     color: #333;
 }
 
-
-/* Encabezado */
 header {
     background-color: white;
     padding: 20px 8%;
@@ -27,8 +24,6 @@ header h1 {
     font-size: 28px;
 }
 
-
-/* Navegación */
 nav {
     display: flex;
     gap: 10px;
@@ -46,21 +41,25 @@ nav a:hover {
     color: white;
 }
 
-
-/* Contenido principal */
 main {
     width: 85%;
     max-width: 1100px;
     margin: 40px auto;
 }
 
-
-/* Página de inicio */
 .inicio {
-    background: linear-gradient(135deg, #2e8b57, #63b77d);
+    background: linear-gradient(135deg, #187a50, #4caf73);
     color: white;
-    padding: 70px 50px;
+    padding: 50px;
     border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.inicio-texto {
+    width: 50%;
 }
 
 .inicio h2 {
@@ -75,8 +74,16 @@ main {
     max-width: 650px;
 }
 
+.inicio-imagen {
+    width: 45%;
+}
 
-/* Botones */
+.inicio-imagen img {
+    width: 100%;
+    display: block;
+    border-radius: 18px;
+}
+
 .boton {
     display: inline-block;
     margin-top: 15px;
@@ -92,8 +99,17 @@ main {
     background-color: #e8f5ec;
 }
 
+.inicio .boton {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 22px;
+    background-color: white;
+    color: #2e8b57;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+}
 
-/* Sección informativa */
 .informacion {
     margin-top: 30px;
     padding: 30px;
@@ -106,8 +122,6 @@ main {
     color: #2e8b57;
 }
 
-
-/* Títulos de páginas */
 .titulo-pagina {
     text-align: left;
     margin-bottom: 30px;
@@ -119,16 +133,12 @@ main {
     margin-bottom: 10px;
 }
 
-
-/* Centros de reciclaje */
 .centros {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 25px;
 }
 
-
-/* Tarjetas */
 .tarjeta {
     background-color: white;
     padding: 25px;
@@ -151,8 +161,6 @@ main {
     color: white;
 }
 
-
-/* Página de detalle */
 .detalle-centro {
     background-color: white;
     padding: 40px;
@@ -179,16 +187,18 @@ main {
     color: white;
 }
 
-
-/* Página de consejos */
 .consejos {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 25px;
 }
 
+.materiales {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
 
-/* Pie de página */
 footer {
     background-color: #26332c;
     color: white;
@@ -197,8 +207,223 @@ footer {
     margin-top: 50px;
 }
 
+form {
+    margin-top: 20px;
+}
 
-/* Adaptación para pantallas pequeñas */
+form label {
+    font-weight: bold;
+    color: #333;
+}
+
+form input,
+form select {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+form input:focus,
+form select:focus {
+    outline: none;
+    border-color: #2e8b57;
+}
+
+form button {
+    margin-top: 15px;
+    padding: 12px 22px;
+    background-color: #2e8b57;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #246f47;
+}
+
+.errores-formulario {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #e0a4aa;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.errores-formulario h2 {
+    margin-bottom: 10px;
+}
+
+.errores-formulario ul {
+    padding-left: 25px;
+}
+
+
+/* Nuevos estilos para el inicio de sesión */
+
+body.login-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f7f6;
+    margin: 0;
+}
+
+body.login-page main.login-contenedor {
+    width: 90%;
+    max-width: 1080px;
+    margin: 40px auto;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+body.login-page .login-tarjeta {
+    width: 100%;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 35px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+body.login-page .login-tarjeta h2 {
+    color: #2e8b57;
+    font-size: 32px;
+    text-align: center;
+    margin: 0 0 20px;
+}
+
+body.login-page .login-descripcion {
+    color: #555;
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+body.login-page .login-tarjeta form {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+}
+
+body.login-page .login-campo {
+    display: block;
+    width: 100%;
+    margin-bottom: 22px;
+}
+
+body.login-page .login-campo label {
+    display: block;
+    width: 100%;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+body.login-page .login-campo input {
+    display: block;
+    width: 100%;
+    max-width: none;
+    padding: 14px;
+    margin: 0;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+body.login-page .login-campo input:focus {
+    outline: none;
+    border-color: #2e8b57;
+    box-shadow: 0 0 0 2px rgba(46, 139, 87, 0.12);
+}
+
+body.login-page .login-recordar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    width: 100%;
+    margin: 20px 0;
+}
+
+body.login-page .login-recordar input[type="checkbox"] {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    flex: 0 0 18px;
+    cursor: pointer;
+    accent-color: #2e8b57;
+}
+
+body.login-page .login-recordar label {
+    display: inline-block;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    font-size: 17px;
+    font-weight: normal;
+    color: #333;
+    cursor: pointer;
+}
+
+body.login-page .login-boton {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin: 25px 0 0;
+    background-color: #2e8b57;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+body.login-page .login-boton:hover {
+    background-color: #246f47;
+}
+
+body.login-page .login-error {
+    background-color: #f8d7da;
+    color: #842029;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #e0a4aa;
+    border-radius: 10px;
+    text-align: center;
+}
+
+body.login-page footer {
+    width: 100%;
+    margin-top: auto;
+    background-color: #26332c;
+    color: white;
+    padding: 25px;
+    text-align: center;
+}
+
+
 @media (max-width: 700px) {
 
     header {
@@ -217,148 +442,66 @@ footer {
     }
 
     .inicio {
+        flex-direction: column;
         padding: 40px 25px;
+    }
+
+    .inicio-texto,
+    .inicio-imagen {
+        width: 100%;
     }
 
     .inicio h2 {
         font-size: 30px;
     }
-}
 
-.materiales {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-}
+    .materiales {
+        grid-template-columns: 1fr;
+    }
 
-/* Página de inicio */
-.inicio {
-    background: linear-gradient(135deg, #187a50, #4caf73);
-    color: white;
-    padding: 50px;
-    border-radius: 20px;
+    body.login-page header {
+        flex-direction: column;
+        gap: 15px;
+    }
 
-    /* Coloca el texto y la imagen uno al lado del otro */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
-}
+    body.login-page header nav {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
 
+    body.login-page main.login-contenedor {
+        width: 94%;
+        margin: 25px auto;
+    }
 
-/* Parte izquierda */
-.inicio-texto {
-    width: 50%;
-}
+    body.login-page .login-tarjeta {
+        padding: 25px 20px;
+        border-radius: 15px;
+    }
 
+    body.login-page .login-tarjeta h2 {
+        font-size: 28px;
+    }
 
-.inicio h2 {
-    font-size: 38px;
-    margin-top: 0;
-    margin-bottom: 20px;
-}
+    body.login-page .login-descripcion {
+        font-size: 16px;
+    }
 
+    body.login-page .login-campo label {
+        font-size: 16px;
+    }
 
-.inicio p {
-    font-size: 18px;
-    line-height: 1.6;
-}
+    body.login-page .login-campo input {
+        font-size: 16px;
+    }
 
+    body.login-page .login-recordar label {
+        font-size: 15px;
+    }
 
-/* Parte derecha */
-.inicio-imagen {
-    width: 45%;
-}
-
-
-/* Imagen */
-.inicio-imagen img {
-    width: 100%;
-    display: block;
-    border-radius: 18px;
-}
-
-
-/* Botón de la página principal */
-.inicio .boton {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 12px 22px;
-    background-color: white;
-    color: #2e8b57;
-    text-decoration: none;
-    border-radius: 25px;
-    font-weight: bold;
-}
-
-/* Formularios */
-form {
-    margin-top: 20px;
-}
-
-
-/* Etiquetas de los formularios */
-form label {
-    font-weight: bold;
-    color: #333;
-}
-
-
-/* Campos de texto y listas */
-form input,
-form select {
-    width: 100%;
-    max-width: 500px;
-    padding: 12px;
-    margin-top: 8px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-}
-
-
-/* Efecto cuando seleccionamos un campo */
-form input:focus,
-form select:focus {
-    outline: none;
-    border-color: #2e8b57;
-}
-
-
-/* Botones de los formularios */
-form button {
-    margin-top: 15px;
-    padding: 12px 22px;
-    background-color: #2e8b57;
-    color: white;
-    border: none;
-    border-radius: 25px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-
-/* Efecto del botón */
-form button:hover {
-    background-color: #246f47;
-}
-
-
-/* Mensajes de error del formulario */
-.errores-formulario {
-    background-color: #f8d7da;
-    color: #842029;
-    border: 1px solid #e0a4aa;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 20px 0;
-}
-
-.errores-formulario h2 {
-    margin-bottom: 10px;
-}
-
-.errores-formulario ul {
-    padding-left: 25px;
+    body.login-page .login-boton {
+        font-size: 16px;
+    }
 }

@@ -1,14 +1,11 @@
-
 <?php
 
-// Incluimos las funciones de nuestro proyecto
+require_once __DIR__ . "/includes/sesion.php";
 require_once "includes/funciones.php";
 
-// Variable que guarda el título de la página
+
 $titulo = "Centros de reciclaje";
 
-// Arreglo que contiene la información de los centros de reciclaje
-// Cada centro tiene nombre, zona, materiales y disponibilidad
 $centros = [
 
     [
@@ -52,25 +49,22 @@ $centros = [
 
 <head>
 
-    <!-- Configuración básica de la página -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title><?php echo escaparHTML($titulo); ?> - ReciclaCDMX</title>
 
-    <!-- Archivo de estilos -->
-    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="CSS/estilos.css">
+
 
 </head>
 
 <body>
 
-    <!-- Encabezado -->
     <header>
 
         <h1>ReciclaCDMX</h1>
 
-        <!-- Menú de navegación -->
         <?php include "includes/nav.php"; ?>
 
     </header>
@@ -78,7 +72,6 @@ $centros = [
 
     <main>
 
-        <!-- Primera sección: introducción -->
         <section class="titulo-pagina">
 
             <h2><?php echo escaparHTML($titulo); ?></h2>
@@ -96,36 +89,29 @@ $centros = [
         </section>
 
 
-        <!-- Segunda sección: centros disponibles -->
         <section class="centros">
 
             <?php
-            // foreach recorre todos los centros guardados en el arreglo
             foreach ($centros as $centro) {
             ?>
 
-                <!-- Se crea una tarjeta por cada centro -->
                 <div class="tarjeta">
 
-                    <!-- Mostramos el nombre del centro -->
                     <h3>
                         <?php echo escaparHTML($centro["nombre"]); ?>
                     </h3>
 
-                    <!-- Mostramos la zona -->
                     <p>
                         <strong>Zona:</strong>
                         <?php echo escaparHTML($centro["zona"]); ?>
                     </p>
 
-                    <!-- Mostramos los materiales -->
                     <p>
                         <strong>Materiales:</strong>
                         <?php echo escaparHTML($centro["materiales"]); ?>
                     </p>
 
 
-                    <!-- Comprobamos si el centro está disponible -->
                     <?php if ($centro["disponible"]) { ?>
 
                         <p>
@@ -143,7 +129,6 @@ $centros = [
                     <?php } ?>
 
 
-                    <!-- Enlace a la página con más información -->
                     <a class="boton" href="detalle.php?centro=<?php echo urlencode($centro["id"]); ?>">
                         Ver detalles
                     </a>
@@ -157,7 +142,6 @@ $centros = [
         </section>
 
 
-        <!-- Tercera sección: recomendación -->
         <section class="informacion">
 
             <h2>Antes de llevar tus residuos</h2>
@@ -173,7 +157,6 @@ $centros = [
     </main>
 
 
-    <!-- Pie de página -->
     <?php include "includes/footer.php"; ?>
 
 </body>
