@@ -5,13 +5,15 @@ ReciclaCDMX es una página web que tiene como objetivo mostrar información sobr
 
 ## Versión
 
-0.5.0
+0.6.0
 
 ## Tecnologías
 
 - HTML5
 - CSS3
 - PHP
+- MySQL
+- phpMyAdmin
 - Visual Studio Code
 - XAMPP
 
@@ -19,57 +21,68 @@ ReciclaCDMX es una página web que tiene como objetivo mostrar información sobr
 
 Para ejecutar el proyecto se necesita:
 
-- XAMPP con Apache iniciado o un servidor local de PHP.
+- XAMPP con Apache y MySQL iniciados.
+- PHP con la extensión mysqli habilitada.
 - Un navegador como Google Chrome, Safari o Microsoft Edge.
 - Tener la carpeta completa del proyecto.
+- Importar la base de datos recicla_cdmx en MySQL.
 
 ## Ejecución
 
 1. Colocar la carpeta ReciclaCDMX dentro de htdocs de XAMPP.
-2. Iniciar Apache desde XAMPP.
-3. Abrir el navegador.
-4. Entrar a http://localhost/ReciclaCDMX/index.php.
-5. Utilizar el menú para navegar entre las páginas.
+2. Iniciar Apache y MySQL desde XAMPP.
+3. Abrir phpMyAdmin.
+4. Crear la base de datos recicla_cdmx si todavía no existe.
+5. Importar el archivo database/recicla_cdmx.sql.
+6. Revisar la conexión en config/conexion.php.
+7. Abrir el navegador.
+8. Entrar a http://localhost/ReciclaCDMX/index.php.
+9. Utilizar el menú para navegar entre las páginas.
 
 También se puede ejecutar desde la terminal de Visual Studio Code, ubicándose en la carpeta del proyecto y utilizando:
 
-```bash
-php -S localhost:8000
-```
+    php -S localhost:8000
 
 Después se abre:
 
 http://localhost:8000/index.php
 
+Para utilizar el registro y el inicio de sesión es necesario tener MySQL funcionando.
+
 ## Estructura del proyecto
 
-```text
-ReciclaCDMX/
-│
-├── index.php
-├── centros.php
-├── detalle.php
-├── materiales.php
-├── consejos.php
-├── registro.php
-├── login.php
-├── logout.php
-├── admin.php
-│
-├── CSS/
-│   └── estilos.css
-│
-├── img/
-│   └── reciclaje.png
-│
-├── includes/
-│   ├── nav.php
-│   ├── footer.php
-│   ├── funciones.php
-│   └── sesion.php
-│
-└── README.md
-```
+    ReciclaCDMX/
+    |
+    |-- index.php
+    |-- centros.php
+    |-- detalle.php
+    |-- materiales.php
+    |-- consejos.php
+    |-- registro.php
+    |-- crear_cuenta.php
+    |-- login.php
+    |-- logout.php
+    |-- admin.php
+    |
+    |-- CSS/
+    |   |-- estilos.css
+    |
+    |-- img/
+    |   |-- reciclaje.png
+    |
+    |-- config/
+    |   |-- conexion.php
+    |
+    |-- database/
+    |   |-- recicla_cdmx.sql
+    |
+    |-- includes/
+    |   |-- nav.php
+    |   |-- footer.php
+    |   |-- funciones.php
+    |   |-- sesion.php
+    |
+    |-- README.md
 
 ## Funcionalidades actuales
 
@@ -90,7 +103,10 @@ El proyecto permite:
 - Mostrar errores cuando los datos son incorrectos.
 - Mostrar confirmaciones cuando los datos son correctos.
 - Utilizar funciones PHP reutilizables.
-- Iniciar sesión con usuarios temporales.
+- Registrar cuentas de usuarios en MySQL.
+- Proteger contraseñas mediante password_hash().
+- Iniciar sesión con usuarios almacenados en MySQL.
+- Verificar contraseñas mediante password_verify().
 - Recordar el correo mediante cookies.
 - Cerrar sesiones.
 - Proteger páginas que requieren iniciar sesión.
@@ -141,7 +157,7 @@ La página materiales.php permite buscar materiales reciclables.
 
 La información se consulta en un arreglo y se muestra dinámicamente.
 
-### Registro mediante POST
+### Registro de materiales mediante POST
 
 La página registro.php permite ingresar:
 
@@ -156,13 +172,37 @@ Si existen errores, muestra mensajes indicando qué información debe corregirse
 
 Si los datos son correctos, muestra una confirmación.
 
-Actualmente la información no se almacena en una base de datos.
+Actualmente la información de materiales no se almacena en MySQL.
+
+### Registro de usuarios mediante POST
+
+La página crear_cuenta.php permite registrar nuevos usuarios.
+
+Solicita:
+
+- Nombre.
+- Correo electrónico.
+- Contraseña.
+
+El formulario valida que la información sea correcta.
+
+También comprueba que el correo no esté registrado previamente.
+
+La contraseña se protege mediante password_hash() y PASSWORD_DEFAULT.
+
+Los usuarios registrados reciben automáticamente el rol usuario.
+
+El formulario público no permite seleccionar el rol administrador.
+
+La información se almacena en la tabla usuarios de MySQL utilizando consultas preparadas.
 
 ## Tarea 5: Cookies y sesiones
 
-En esta versión se incorporaron cookies y sesiones para representar el acceso temporal de usuarios al portal.
+En la Tarea 5 se incorporaron cookies y sesiones para controlar el acceso temporal de usuarios al portal.
 
-Se agregaron usuarios ficticios con diferentes roles y se protegieron algunos apartados del sitio.
+Se utilizaron inicialmente usuarios ficticios definidos en PHP.
+
+También se protegieron algunas páginas y se adaptó la navegación según el rol.
 
 ### Inicio de sesión
 
@@ -174,11 +214,7 @@ Este archivo contiene un formulario que solicita:
 - Contraseña.
 - Opción para recordar el correo.
 
-Los datos ingresados se comparan con usuarios temporales definidos en PHP.
-
-Si la información es correcta, se inicia la sesión y se redirige al usuario a la página principal.
-
-Si los datos son incorrectos, aparece un mensaje de error.
+En la Tarea 6 se modificó para consultar los usuarios almacenados en MySQL.
 
 ### Cookies
 
@@ -200,17 +236,18 @@ Se utiliza session_start() para iniciar o recuperar sesiones.
 
 Mediante $_SESSION se almacenan temporalmente:
 
-- Nombre del usuario.
+- Identificador del usuario.
+- Nombre.
 - Correo electrónico.
-- Rol del usuario.
+- Rol.
 
 Se utiliza session_regenerate_id() al iniciar sesión correctamente.
 
-El archivo includes/sesion.php contiene las funciones necesarias para validar usuarios, comprobar sesiones y verificar permisos.
+El archivo includes/sesion.php contiene las funciones necesarias para comprobar sesiones y verificar permisos.
 
 ### Usuarios y roles
 
-Se definieron dos tipos de usuarios temporales.
+Se mantienen dos tipos de usuarios.
 
 **Usuario registrado**
 
@@ -220,18 +257,9 @@ Puede consultar las páginas públicas y acceder al formulario de registro de ma
 
 Puede consultar las páginas públicas, acceder al registro y entrar al panel de administración.
 
-### Usuarios de prueba
-
-| Correo | Contraseña | Rol |
-|--------|------------|-----|
-| usuario@reciclacdmx.com | Usuario123 | Usuario |
-| admin@reciclacdmx.com | Admin123 | Administrador |
-
-Estos datos son ficticios y se utilizan únicamente para realizar pruebas del proyecto.
-
 ### Protección de páginas
 
-Se agregó la función protegerPagina() para verificar si existe una sesión activa.
+Se utiliza la función protegerPagina() para verificar si existe una sesión activa.
 
 La página registro.php requiere que el usuario haya iniciado sesión.
 
@@ -253,119 +281,271 @@ Los administradores también pueden acceder al panel de administración.
 
 ### Cierre de sesión
 
-Se creó logout.php.
-
-Este archivo elimina la información de $_SESSION y destruye la sesión activa.
+El archivo logout.php elimina la información de $_SESSION y destruye la sesión activa.
 
 Después redirige al usuario al formulario de inicio de sesión.
 
 La cookie del correo recordado se conserva si el usuario eligió recordarlo.
 
-## Archivos agregados en la Tarea 5
+## Tarea 6: Registro y acceso con MySQL
 
-### login.php
+En esta tarea se incorporó MySQL al proyecto ReciclaCDMX.
 
-Formulario para iniciar sesión y recordar el correo mediante cookies.
+El objetivo fue sustituir los usuarios temporales definidos en PHP por usuarios almacenados en una base de datos.
 
-### logout.php
+Se conservaron las sesiones, cookies, roles y funciones de navegación que se habían desarrollado en la Tarea 5.
 
-Permite cerrar la sesión del usuario.
+### Base de datos
 
-### admin.php
+Se creó una base de datos llamada recicla_cdmx.
 
-Panel exclusivo para usuarios con rol de administrador.
+Actualmente contiene la tabla usuarios.
 
-### includes/sesion.php
+Esta tabla almacena la información necesaria para registrar usuarios y permitir el inicio de sesión.
 
-Contiene los usuarios ficticios y las funciones para validar credenciales, controlar sesiones y verificar permisos.
+### Tabla usuarios
 
-## Archivos modificados
+La tabla contiene los siguientes campos:
 
-### includes/nav.php
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | INT | Identificador único y autoincremental. |
+| nombre | VARCHAR(100) | Nombre del usuario. |
+| correo | VARCHAR(150) | Correo electrónico único. |
+| contrasena | VARCHAR(255) | Contraseña protegida mediante hash. |
+| rol | VARCHAR(30) | Rol asignado al usuario. |
 
-Se adaptó el menú según el estado de la sesión y el rol del usuario.
+El campo correo es único para evitar que se registren cuentas duplicadas.
 
-### registro.php
+El campo rol tiene como valor predeterminado usuario.
 
-Se agregó una comprobación para impedir el acceso a visitantes que no hayan iniciado sesión.
+### Conexión con MySQL
 
-### README.md
+Se creó la carpeta config con el archivo conexion.php.
 
-Se actualizó la documentación del proyecto a la versión 0.5.0.
+Este archivo permite conectar PHP con la base de datos recicla_cdmx utilizando mysqli.
+
+La conexión se reutiliza en las páginas que necesitan consultar o guardar información en MySQL.
+
+### Registro de usuarios
+
+Se creó el archivo crear_cuenta.php.
+
+El formulario recibe los datos mediante POST.
+
+Antes de guardar la información:
+
+- Comprueba que el nombre sea válido.
+- Valida el formato del correo electrónico.
+- Comprueba la longitud de la contraseña.
+- Verifica que el correo no exista previamente.
+- Protege la contraseña mediante password_hash().
+- Asigna automáticamente el rol usuario.
+- Guarda los datos mediante una consulta preparada.
+- Muestra un mensaje de acuerdo con el resultado.
+
+Los usuarios no pueden registrarse directamente como administradores desde el formulario público.
+
+### Inicio de sesión con MySQL
+
+Se modificó login.php para validar los usuarios almacenados en la base de datos.
+
+El proceso funciona de la siguiente manera:
+
+1. El usuario escribe su correo y contraseña.
+2. PHP recibe los datos mediante POST.
+3. Se busca el correo en MySQL mediante una consulta preparada.
+4. Se recupera la información del usuario.
+5. Se comprueba la contraseña mediante password_verify().
+6. Si los datos son correctos, se inicia la sesión.
+7. Se guardan el identificador, nombre, correo y rol.
+8. Se redirige al usuario a la página principal.
+
+Si el correo o la contraseña son incorrectos, aparece un mensaje de error.
+
+### Protección de contraseñas
+
+Las contraseñas no se guardan directamente como texto.
+
+Se utiliza password_hash() con PASSWORD_DEFAULT al crear una cuenta.
+
+Para iniciar sesión se utiliza password_verify().
+
+Esto permite verificar la contraseña sin almacenar su valor original en la base de datos.
+
+### Control de acceso
+
+Se conservaron los roles usuario y administrador.
+
+El archivo includes/sesion.php contiene las funciones:
+
+- sesionActiva().
+- obtenerRol().
+- protegerPagina().
+- esAdministrador().
+
+Estas funciones permiten comprobar si existe una sesión activa y determinar los permisos del usuario.
+
+El administrador puede acceder a admin.php.
+
+Los usuarios normales no pueden acceder al panel administrativo.
+
+### Usuarios de prueba
+
+Se crearon cuentas ficticias para comprobar el funcionamiento de los diferentes roles.
+
+| Correo | Contraseña | Rol |
+|--------|------------|-----|
+| prueba@reciclacdmx.com | Prueba12345 | Usuario |
+| admin@reciclacdmx.com | Admin12345 | Administrador |
+
+Estas cuentas se utilizan únicamente para realizar pruebas.
+
+Las contraseñas están almacenadas mediante hashes en MySQL.
+
+El rol administrador se asignó directamente desde la base de datos, no desde el formulario público.
+
+### Pruebas realizadas
+
+Se comprobó el funcionamiento de las siguientes características:
+
+- Creación de la base de datos recicla_cdmx.
+- Creación de la tabla usuarios.
+- Conexión de PHP con MySQL.
+- Registro de una cuenta de usuario.
+- Almacenamiento de la contraseña protegida.
+- Asignación del rol usuario.
+- Inicio de sesión con una cuenta de administrador.
+- Acceso al panel de administración.
+
+También se mantiene el código de protección para impedir el acceso de usuarios normales a las funciones administrativas.
+
+### Archivo SQL
+
+La carpeta database contiene el archivo recicla_cdmx.sql.
+
+Este archivo debe exportarse desde phpMyAdmin e incluir:
+
+- La estructura de la base de datos.
+- La tabla usuarios.
+- Las cuentas ficticias necesarias para probar los accesos.
+
+El archivo permite importar la base de datos en otro equipo y realizar las pruebas del proyecto.
 
 ## Base de datos propuesta
 
-En una futura versión se planea utilizar MySQL para almacenar información de manera permanente.
+En la Tarea 5 se propuso utilizar MySQL para almacenar información de manera permanente.
 
-Se proponen las siguientes tres tablas.
+Se plantearon tres tablas principales:
+
+- Usuarios.
+- CentrosReciclaje.
+- RegistrosMateriales.
+
+En la Tarea 6 se implementó la base de datos recicla_cdmx y la tabla usuarios.
 
 ### 1. Usuarios
 
-Almacenaría la información de las personas registradas en ReciclaCDMX.
+Esta tabla ya se encuentra implementada.
 
-Campos principales:
+Almacena los nombres, correos, contraseñas protegidas y roles de las cuentas registradas.
 
-- id_usuario: identificador del usuario.
-- nombre: nombre completo.
-- correo: correo electrónico.
-- contrasena_hash: contraseña protegida.
-- rol: usuario o administrador.
-- fecha_registro: fecha de registro.
+Respecto a la propuesta inicial, se utilizaron los campos id y contrasena en lugar de id_usuario y contrasena_hash.
+
+El campo fecha_registro no se incorporó en esta versión.
 
 ### 2. CentrosReciclaje
+
+Esta tabla todavía está propuesta para una versión futura.
 
 Almacenaría información de los centros de reciclaje disponibles en el portal.
 
 Campos principales:
 
-- id_centro: identificador del centro.
-- nombre: nombre del centro de reciclaje.
-- direccion: ubicación del centro.
-- alcaldia: alcaldía donde se encuentra.
-- horario: horario de atención.
-- materiales_aceptados: información sobre los materiales recibidos.
+- id_centro.
+- nombre.
+- direccion.
+- alcaldia.
+- horario.
+- materiales_aceptados.
 
 ### 3. RegistrosMateriales
 
-Almacenaría los materiales que registren los usuarios.
+Esta tabla también se mantiene como propuesta.
+
+Almacenaría los materiales registrados por los usuarios.
 
 Campos principales:
 
-- id_registro: identificador del registro.
-- id_usuario: usuario que registró el material.
-- material: tipo de material.
-- cantidad: cantidad aproximada en kilogramos.
-- fecha_registro: fecha en que se realizó el registro.
+- id_registro.
+- id_usuario.
+- material.
+- cantidad.
+- fecha_registro.
 
-Estas tablas se utilizarían para conectar los usuarios, los centros de reciclaje y los materiales registrados.
+En versiones posteriores se podrían relacionar estas tablas para administrar la información de reciclaje desde MySQL.
 
-En esta etapa solamente se propone la estructura. No se requiere crear la base de datos ni escribir sentencias SQL.
+## Archivos agregados en la Tarea 6
 
-## Mejoras de la Tarea 5
+### config/conexion.php
 
-- Se creó un formulario de inicio de sesión.
-- Se definieron usuarios ficticios.
-- Se agregó el uso de cookies.
-- Se implementaron sesiones mediante PHP.
-- Se agregó el cierre de sesión.
-- Se protegió el formulario de registro.
-- Se creó un apartado exclusivo para administradores.
-- Se modificó el menú según el rol del usuario.
-- Se conservaron las funciones de las tareas anteriores.
-- Se propusieron tres tablas para una futura base de datos.
+Permite establecer la conexión entre PHP y MySQL utilizando mysqli.
+
+### crear_cuenta.php
+
+Contiene el formulario y las validaciones para registrar usuarios nuevos.
+
+### database/recicla_cdmx.sql
+
+Contiene la estructura y los datos exportados desde MySQL para realizar las pruebas.
+
+## Archivos modificados en la Tarea 6
+
+### login.php
+
+Se modificó para consultar los usuarios en MySQL y verificar sus contraseñas mediante password_verify().
+
+### includes/sesion.php
+
+Se eliminaron los usuarios temporales definidos en arreglos de PHP.
+
+Se conservaron las funciones para controlar sesiones y verificar permisos.
+
+### README.md
+
+Se actualizó la documentación del proyecto a la versión 0.6.0.
+
+## Mejoras de la Tarea 6
+
+- Se integró MySQL al proyecto.
+- Se creó la tabla usuarios.
+- Se agregó una conexión mediante mysqli.
+- Se implementó el registro de cuentas.
+- Se agregaron validaciones para evitar registros incorrectos.
+- Se evitó el registro de correos duplicados.
+- Se utilizaron consultas preparadas.
+- Se protegieron las contraseñas mediante password_hash().
+- Se modificó el inicio de sesión para consultar MySQL.
+- Se utilizó password_verify().
+- Se conservaron las cookies y sesiones.
+- Se mantuvieron los roles de usuario y administrador.
+- Se conservaron los permisos y la navegación.
+- Se eliminó la dependencia de usuarios temporales definidos en PHP.
 - Se actualizó la documentación del proyecto.
 
 ## Estado actual
 
-ReciclaCDMX se encuentra en su quinta versión.
+ReciclaCDMX se encuentra en su sexta versión.
 
 El proyecto cuenta con páginas PHP, estilos CSS, formularios, validación de datos, contenido dinámico, cookies, sesiones y control de acceso según el rol.
 
-El sistema utiliza usuarios ficticios definidos en PHP.
+Ahora también utiliza MySQL para almacenar las cuentas de usuarios.
 
-Actualmente no existe conexión con MySQL ni almacenamiento permanente de información.
+Las contraseñas se protegen mediante hashes y el inicio de sesión se valida consultando la base de datos.
 
-El panel administrativo muestra las funciones que podrían desarrollarse en versiones posteriores.
+Se mantienen los apartados públicos y las funciones exclusivas para administradores.
+
+Los registros de materiales y la información de centros de reciclaje todavía no se almacenan en MySQL.
 
 ## Historial de versiones
 
@@ -376,16 +556,17 @@ El panel administrativo muestra las funciones que podrían desarrollarse en vers
 | 0.3.0 | Formularios GET y POST, validaciones y mensajes de error. |
 | 0.4.0 | Funciones reutilizables, organización del proyecto y cierre de la Fase 1. |
 | 0.5.0 | Cookies, sesiones, usuarios temporales, control de acceso y navegación según roles. |
+| 0.6.0 | Integración de MySQL, registro de usuarios, contraseñas protegidas e inicio de sesión con base de datos. |
 
 ## Próximas mejoras
 
 En futuras versiones se podrían agregar:
 
-- Conexión con MySQL.
-- Registro real de usuarios.
-- Almacenamiento permanente de materiales.
+- Almacenamiento de materiales en MySQL.
 - Administración de centros de reciclaje.
 - Edición de información por parte del administrador.
 - Consultas de registros almacenados.
+- Recuperación de contraseñas.
+- Administración de cuentas de usuarios.
 
 Estas funcionalidades todavía no están implementadas.
